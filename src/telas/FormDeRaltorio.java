@@ -6,6 +6,7 @@
 package telas;
 
 import dao.ModuloConexao;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
@@ -60,10 +61,16 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
         jLabel3.setText("Competência");
 
         btnVisualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconsVisualizar.png"))); // NOI18N
+        btnVisualizar.setMnemonic('E');
         btnVisualizar.setText("Visualizar");
         btnVisualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVisualizarActionPerformed(evt);
+            }
+        });
+        btnVisualizar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnVisualizarKeyPressed(evt);
             }
         });
 
@@ -78,7 +85,7 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
             }
         });
 
-        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
+        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,6 +167,10 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
     private void txtRelComActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRelComActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtRelComActionPerformed
+
+    private void btnVisualizarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnVisualizarKeyPressed
+       btnVisualizar.setMnemonic(KeyEvent.VK_ENTER); //TECLA DE ATALHO
+    }//GEN-LAST:event_btnVisualizarKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

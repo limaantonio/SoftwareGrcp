@@ -10,6 +10,7 @@
       <SubComponents>
         <Menu class="javax.swing.JMenu" name="menuArquivo">
           <Properties>
+            <Property name="mnemonic" type="int" value="97"/>
             <Property name="text" type="java.lang.String" value="Arquivo"/>
           </Properties>
           <SubComponents>

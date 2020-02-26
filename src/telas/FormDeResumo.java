@@ -6,12 +6,14 @@
 package telas;
 
 import dao.ModuloConexao;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
+import static telas.FormDeResumo.btnVisualizar;
 
 /**
  *
@@ -24,7 +26,11 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
      */
     public FormDeResumo() {
         initComponents();
+       
+         
     }
+    
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -60,10 +66,16 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
         jLabel3.setText("Competencia");
 
         btnVisualizar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconsVisualizar.png"))); // NOI18N
+        btnVisualizar.setMnemonic('n');
         btnVisualizar.setText("Visualizar");
         btnVisualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnVisualizarActionPerformed(evt);
+            }
+        });
+        btnVisualizar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btnVisualizarKeyPressed(evt);
             }
         });
 
@@ -73,7 +85,7 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
             ex.printStackTrace();
         }
 
-        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
+        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -126,9 +138,10 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
     private void txtResSetorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtResSetorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtResSetorActionPerformed
-
+    
     private void btnVisualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisualizarActionPerformed
-       int confirma = JOptionPane.showConfirmDialog(null, "Confirma a impressão?",
+       
+        int confirma = JOptionPane.showConfirmDialog(null, "Confirma a impressão?",
                     "Atenção",
                     JOptionPane.YES_NO_OPTION);
            
@@ -150,9 +163,13 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
        }
     }//GEN-LAST:event_btnVisualizarActionPerformed
 
+    private void btnVisualizarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnVisualizarKeyPressed
+        btnVisualizar.setMnemonic(KeyEvent.VK_ENTER); //TECLA DE ATALHO
+    }//GEN-LAST:event_btnVisualizarKeyPressed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnVisualizar;
+    protected static javax.swing.JButton btnVisualizar;
     private javax.swing.JComboBox<String> cbSecretaria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

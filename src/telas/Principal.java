@@ -139,6 +139,7 @@ public class Principal extends javax.swing.JFrame {
         });
         jToolBar1.add(btnResumo);
 
+        menuArquivo.setMnemonic('a');
         menuArquivo.setText("Arquivo");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));

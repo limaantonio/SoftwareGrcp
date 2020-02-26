@@ -8,6 +8,7 @@ package telas;
 import dao.ModuloConexao;
 import entidades.Guia;
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.text.NumberFormat;
@@ -43,6 +44,22 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         connection = ModuloConexao.conector();
         
     }
+    
+    public int retornaId() throws SQLException{
+        String res ;
+        
+        String sql = "SELECT COUNT(GUI_ID) FROM tbGuias";
+        PreparedStatement p1 = connection.prepareStatement(sql);
+        
+        ResultSet r1 = p1.executeQuery();
+        if(r1.next()){
+            return r1.getInt(1);
+        }
+        return 0;
+        
+        
+        
+    }
   
     private void salvar(){
         
@@ -55,16 +72,31 @@ public class NovaGuia extends javax.swing.JInternalFrame {
        Double vSp = base * 4 / 100;
        Double vTp = vP + vSp;
        Double vTg = vS + vTp;
+       
+       
+       
+       
     
         String sql = "INSERT INTO tbGuias (GUI_NUMERO,  GUI_SECRETARIA, GUI_BASE, GUI_VALOR_"
                 + "SERVIDOR, GUI_VALOR_PATRONAL, GUI_VALOR_SUPLEMENTAR, GUI_OBSERVACAO, GUI_DATA_CADASTRO)"
                 + "VALUES (?,?,?,?,?,?,?, ?)";
+        
+        
+        
+        
         System.out.println(txtBaseCalculo.getText().replace("R$", "")
                         .replace(".", "").replace(",", ".").replace(" ", ""));
         
+        
+        
         try{
+           
+            Integer n = retornaId();
+            n++;
+            System.out.println(n);
             pst = connection.prepareStatement(sql);
-            pst.setString(1, txtNumero.getText());
+            pst.setString(1, n.toString());
+           // if(txtNumero i)
             pst.setString(2, cbSecretaria.getSelectedItem().toString());
             pst.setString(3, txtBaseCalculo.getText().replace("R$", "")
                         .replace(".", "").replace(",", ".").replace(" ", ""));
@@ -85,6 +117,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             txtValSuplementar.setText(vSp.toString());
             txtTotalPatronal.setText(vTp.toString());
             txtTotalGeral.setText(vTg.toString());
+            txtNumero.setText(n.toString());
           
             
             int resposta = JOptionPane.showConfirmDialog(null,
@@ -104,6 +137,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
            
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e);
+            System.out.println(e);
         }
     }
     
@@ -200,6 +234,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         txtTotalPatronal.setText(null);
         txtTotalGeral.setText(null);
         txtObservacao.setText(null);
+        txtData.setText(null);
         btnSalvar.setEnabled(true);
 }
     
@@ -324,6 +359,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         });
 
         btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/icons8-salvar-24.png"))); // NOI18N
+        btnSalvar.setMnemonic('g');
         btnSalvar.setText("Gerar");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -332,6 +368,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         });
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconsImpressão-24.png"))); // NOI18N
+        jButton2.setMnemonic('i');
         jButton2.setText("Imprimir");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -340,6 +377,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         });
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconsVisualizar.png"))); // NOI18N
+        jButton3.setMnemonic('p');
         jButton3.setText("Pesquisar");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -348,6 +386,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         });
 
         btnExcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/icons8-excluir-arquivo-24.png"))); // NOI18N
+        btnExcluir.setMnemonic('e');
         btnExcluir.setText("Excluir");
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -356,6 +395,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         });
 
         btnAlterar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/icons8-editar-arquivo-24.png"))); // NOI18N
+        btnAlterar.setMnemonic('a');
         btnAlterar.setText("Alterar");
         btnAlterar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -372,6 +412,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         jLabel8.setText("ID:");
 
         btnNovo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/iconsAdicionar.png"))); // NOI18N
+        btnNovo.setMnemonic('n');
         btnNovo.setText("Novo");
         btnNovo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -455,10 +496,15 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             }
         });
 
-        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
+        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
         cbSecretaria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbSecretariaActionPerformed(evt);
+            }
+        });
+        cbSecretaria.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cbSecretariaKeyPressed(evt);
             }
         });
 
@@ -634,10 +680,6 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         salvar();
     }//GEN-LAST:event_btnSalvarActionPerformed
 
-    private void txtNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNumeroActionPerformed
-
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
         limpaCampos();
     }//GEN-LAST:event_btnNovoActionPerformed
@@ -694,6 +736,16 @@ public class NovaGuia extends javax.swing.JInternalFrame {
     private void cbSecretariaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSecretariaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbSecretariaActionPerformed
+
+    private void txtNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNumeroActionPerformed
+
+    private void cbSecretariaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbSecretariaKeyPressed
+        
+       
+        
+    }//GEN-LAST:event_cbSecretariaKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

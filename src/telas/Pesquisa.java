@@ -7,6 +7,7 @@ package telas;
 
 import dao.ModuloConexao;
 import entidades.Guia;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -63,9 +64,7 @@ public class Pesquisa extends javax.swing.JInternalFrame {
             rs = pst.executeQuery();
             
             tbGuias.setModel(DbUtils.resultSetToTableModel(rs));
-            
-           
-            
+   
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, e);
         }
@@ -127,6 +126,28 @@ public class Pesquisa extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setTitle("Consulta de Guias");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameClosed(evt);
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         tbGuias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -236,7 +257,19 @@ public class Pesquisa extends javax.swing.JInternalFrame {
 
     private void tbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tbCancelarActionPerformed
         // TODO add your handling code here:
+         this.dispose();
+       
     }//GEN-LAST:event_tbCancelarActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        // TODO add your handling code here:
+        btOk.setMnemonic(KeyEvent.VK_ENTER); //TECLA DE ATALHO
+        tbCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
+    }//GEN-LAST:event_formKeyPressed
+
+    private void formInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formInternalFrameClosed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

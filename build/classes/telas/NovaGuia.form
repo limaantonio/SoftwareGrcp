@@ -274,6 +274,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/icones/icons8-salvar-24.png"/>
         </Property>
+        <Property name="mnemonic" type="int" value="103"/>
         <Property name="text" type="java.lang.String" value="Gerar"/>
       </Properties>
       <Events>
@@ -288,6 +289,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/icones/iconsImpress&#xe3;o-24.png"/>
         </Property>
+        <Property name="mnemonic" type="int" value="105"/>
         <Property name="text" type="java.lang.String" value="Imprimir"/>
       </Properties>
       <Events>
@@ -299,6 +301,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/icones/iconsVisualizar.png"/>
         </Property>
+        <Property name="mnemonic" type="int" value="112"/>
         <Property name="text" type="java.lang.String" value="Pesquisar"/>
       </Properties>
       <Events>
@@ -310,6 +313,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/icones/icons8-excluir-arquivo-24.png"/>
         </Property>
+        <Property name="mnemonic" type="int" value="101"/>
         <Property name="text" type="java.lang.String" value="Excluir"/>
       </Properties>
       <Events>
@@ -321,6 +325,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/icones/icons8-editar-arquivo-24.png"/>
         </Property>
+        <Property name="mnemonic" type="int" value="97"/>
         <Property name="text" type="java.lang.String" value="Alterar"/>
       </Properties>
       <Events>
@@ -345,6 +350,7 @@
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/icones/iconsAdicionar.png"/>
         </Property>
+        <Property name="mnemonic" type="int" value="110"/>
         <Property name="text" type="java.lang.String" value="Novo"/>
       </Properties>
       <Events>
@@ -462,17 +468,19 @@
     <Component class="javax.swing.JComboBox" name="cbSecretaria">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="5">
-            <StringItem index="0" value="Administra&#xe7;&#xe3;o"/>
-            <StringItem index="1" value="Desporto"/>
-            <StringItem index="2" value="Educa&#xe7;&#xe3;o"/>
-            <StringItem index="3" value="Infraestrutura"/>
-            <StringItem index="4" value="Sa&#xfa;de"/>
+          <StringArray count="6">
+            <StringItem index="0" value=" "/>
+            <StringItem index="1" value="Administra&#xe7;&#xe3;o"/>
+            <StringItem index="2" value="Desporto"/>
+            <StringItem index="3" value="Educa&#xe7;&#xe3;o"/>
+            <StringItem index="4" value="Infraestrutura"/>
+            <StringItem index="5" value="Sa&#xfa;de"/>
           </StringArray>
         </Property>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbSecretariaActionPerformed"/>
+        <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="cbSecretariaKeyPressed"/>
       </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>

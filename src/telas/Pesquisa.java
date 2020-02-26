@@ -8,8 +8,13 @@ package telas;
 import dao.ModuloConexao;
 import entidades.Guia;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import net.proteanit.sql.DbUtils;
 import org.mozilla.javascript.tools.debugger.GuiCallback;
@@ -19,6 +24,8 @@ import static telas.NovaGuia.txtId;
 import static telas.NovaGuia.txtNumero;
 
 import static telas.NovaGuia.cbSecretaria;
+import static telas.NovaGuia.txtData;
+import static telas.NovaGuia.txtObservacao;
 import static telas.NovaGuia.txtTotalGeral;
 import static telas.NovaGuia.txtTotalPatronal;
 import static telas.NovaGuia.txtValPatronal;
@@ -67,7 +74,7 @@ public class Pesquisa extends javax.swing.JInternalFrame {
          
     }
     
-    public void setarC(){
+    public void setarC() throws ParseException{
         int setar =  tbGuias.getSelectedRow();
         Double v1, v2, v3;
         v1 = Double.parseDouble(tbGuias.getModel().getValueAt(setar, 6).toString());
@@ -82,6 +89,14 @@ public class Pesquisa extends javax.swing.JInternalFrame {
         txtValServidor.setText(tbGuias.getModel().getValueAt(setar, 4).toString());
         txtValPatronal.setText(tbGuias.getModel().getValueAt(setar, 5).toString());
         txtValSuplementar.setText(tbGuias.getModel().getValueAt(setar, 6).toString());
+        txtObservacao.setText(tbGuias.getModel().getValueAt(setar, 7).toString());
+        
+        
+        SimpleDateFormat sdf = new  SimpleDateFormat("dd/MM/yyyy");
+        String data = sdf.format(Date.valueOf(tbGuias.getModel().getValueAt(setar, 8).toString()));
+        txtData.setText(data.toString());
+        
+        
        
         
         v1 = v1 + v2;
@@ -206,11 +221,16 @@ public class Pesquisa extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbGuiasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbGuiasMouseClicked
-        setarC();
+        try {
+            setarC();
+        } catch (ParseException ex) {
+            Logger.getLogger(Pesquisa.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_tbGuiasMouseClicked
 
     private void btOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOkActionPerformed
         pesquisar();
+       
 
     }//GEN-LAST:event_btOkActionPerformed
 

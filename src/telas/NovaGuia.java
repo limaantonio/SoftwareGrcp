@@ -85,6 +85,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             txtValSuplementar.setText(vSp.toString());
             txtTotalPatronal.setText(vTp.toString());
             txtTotalGeral.setText(vTg.toString());
+          
             
             int resposta = JOptionPane.showConfirmDialog(null,
                     "Deseja salvar esses dados?",
@@ -209,7 +210,8 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         if(confirma == JOptionPane.YES_OPTION){
             
            HashMap filtro = new HashMap();
-           filtro.put("id",Integer.parseInt(txtId.getText()));
+           filtro.put("NUM", Integer.parseInt(txtNumero.getText()));
+            System.out.println(filtro);
             try{
                 JasperPrint print = JasperFillManager.fillReport(
                        "/home/carlos/NetBeansProjects/Grcp/src/relatorios/Grcp.jasper"

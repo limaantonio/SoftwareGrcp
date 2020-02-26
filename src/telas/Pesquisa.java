@@ -18,7 +18,7 @@ import static telas.NovaGuia.txtBaseCalculo;
 import static telas.NovaGuia.txtId;
 import static telas.NovaGuia.txtNumero;
 
-import static telas.NovaGuia.txtSecretaria;
+import static telas.NovaGuia.cbSecretaria;
 import static telas.NovaGuia.txtTotalGeral;
 import static telas.NovaGuia.txtTotalPatronal;
 import static telas.NovaGuia.txtValPatronal;
@@ -76,7 +76,7 @@ public class Pesquisa extends javax.swing.JInternalFrame {
        
         txtId.setText(tbGuias.getModel().getValueAt(setar, 0).toString());
         txtNumero.setText(tbGuias.getModel().getValueAt(setar, 1).toString());
-        txtSecretaria.setText(tbGuias.getModel().getValueAt(setar, 2).toString());
+        cbSecretaria.setSelectedItem(tbGuias.getModel().getValueAt(setar, 2).toString());
         txtBaseCalculo.setText(tbGuias.getModel().getValueAt(setar, 3).toString());
         //txtVencimento.setText(tbGuias.getModel().getValueAt(setar, 4).toString());
         txtValServidor.setText(tbGuias.getModel().getValueAt(setar, 4).toString());

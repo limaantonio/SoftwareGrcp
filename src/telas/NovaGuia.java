@@ -65,7 +65,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         try{
             pst = connection.prepareStatement(sql);
             pst.setString(1, txtNumero.getText());
-            pst.setString(2, txtSecretaria.getText());
+            pst.setString(2, cbSecretaria.getSelectedItem().toString());
             pst.setString(3, txtBaseCalculo.getText().replace("R$", "")
                         .replace(".", "").replace(",", ".").replace(" ", ""));
             pst.setString(4, vS.toString());
@@ -121,7 +121,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         try{
             pst = connection.prepareStatement(sql);
             pst.setString(1, txtNumero.getText());
-            pst.setString(2, txtSecretaria.getText());
+            pst.setString(2, cbSecretaria.getSelectedItem().toString());
             pst.setString(3, txtBaseCalculo.getText());
             
             pst.setString(4, txtValServidor.getText());
@@ -141,7 +141,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                 JOptionPane.showMessageDialog(null, "Dados alterados com sucesso.");
                 txtId.setText(null);
                 txtNumero.setText(null);
-                txtSecretaria.setText(null);
+                cbSecretaria.setSelectedItem(null);
                 txtBaseCalculo.setText(null);
                 txtValPatronal.setText(null);
                 txtVencimento.setText(null);
@@ -171,7 +171,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                    txtId.setText(null);
                    txtNumero.setText(null);
                    txtBaseCalculo.setText(null);
-                   txtSecretaria.setText(null);
+                   cbSecretaria.setSelectedItem(null);
                    txtValServidor.setText(null);
                    txtValPatronal.setText(null);
                    txtVencimento.setText(null);
@@ -192,7 +192,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         txtId.setText(null);
         txtNumero.setText(null);
         txtBaseCalculo.setText(null);
-        txtSecretaria.setText(null);
+        cbSecretaria.setSelectedItem(null);
         txtValPatronal.setText(null);
         txtVencimento.setText(null);
         txtValSuplementar.setText(null);
@@ -239,7 +239,6 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         jLabel5 = new javax.swing.JLabel();
         txtValSuplementar = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        txtSecretaria = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         txtObservacao = new javax.swing.JTextField();
         btnSalvar = new javax.swing.JButton();
@@ -261,6 +260,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         txtTotalPatronal = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         txtData = new javax.swing.JFormattedTextField();
+        cbSecretaria = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setTitle("Cadastro");
@@ -312,12 +312,6 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         });
 
         jLabel6.setText("Secretaria:");
-
-        txtSecretaria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSecretariaActionPerformed(evt);
-            }
-        });
 
         jLabel7.setText("Observação:");
 
@@ -459,6 +453,13 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             }
         });
 
+        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
+        cbSecretaria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbSecretariaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -474,7 +475,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                         .addComponent(btnAlterar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnNovo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2))
@@ -507,27 +508,27 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                                         .addComponent(txtData, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)))
                                 .addGap(62, 62, 62)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jLabel3)
+                                                .addComponent(jLabel5)
+                                                .addComponent(jLabel11))
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jLabel9)
+                                            .addGap(55, 55, 55)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel3)
-                                                    .addComponent(jLabel5)
-                                                    .addComponent(jLabel11))
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel9)
-                                                .addGap(55, 55, 55)))
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(txtValServidor)
-                                            .addComponent(txtTotalGeral)
-                                            .addComponent(txtValSuplementar)
-                                            .addComponent(txtVencimento, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE))))))
-                        .addGap(0, 2, Short.MAX_VALUE)))
+                                        .addGap(66, 66, 66)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtValServidor)
+                                        .addComponent(txtTotalGeral)
+                                        .addComponent(txtValSuplementar)
+                                        .addComponent(txtVencimento, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)))))
+                        .addGap(0, 124, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -536,14 +537,13 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                 .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel6)
-                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel8)
-                                .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel8)
+                            .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -602,10 +602,6 @@ public class NovaGuia extends javax.swing.JInternalFrame {
     private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtIdActionPerformed
-
-    private void txtSecretariaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSecretariaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSecretariaActionPerformed
 
     private void txtObservacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtObservacaoActionPerformed
         // TODO add your handling code here:
@@ -693,12 +689,17 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtVencimentoActionPerformed
 
+    private void cbSecretariaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSecretariaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbSecretariaActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public static javax.swing.JButton btnAlterar;
     public static javax.swing.JButton btnExcluir;
     public static javax.swing.JButton btnNovo;
     public static javax.swing.JButton btnSalvar;
+    public static javax.swing.JComboBox<String> cbSecretaria;
     public static javax.swing.JButton jButton2;
     public static javax.swing.JButton jButton3;
     public static javax.swing.JLabel jLabel1;
@@ -718,7 +719,6 @@ public class NovaGuia extends javax.swing.JInternalFrame {
     public static javax.swing.JTextField txtId;
     public static javax.swing.JTextField txtNumero;
     public static javax.swing.JTextField txtObservacao;
-    public static javax.swing.JTextField txtSecretaria;
     public static javax.swing.JTextField txtTotalGeral;
     public static javax.swing.JTextField txtTotalPatronal;
     public static javax.swing.JFormattedTextField txtValPatronal;

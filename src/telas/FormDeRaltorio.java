@@ -37,11 +37,11 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtRelSec = new javax.swing.JTextField();
         txtRelSetor = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         btnVisualizar = new javax.swing.JButton();
         txtRelCom = new javax.swing.JFormattedTextField();
+        cbSecretaria = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setTitle("Guias");
@@ -78,6 +78,8 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
             }
         });
 
+        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,7 +100,7 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
                             .addGap(36, 36, 36)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(txtRelSetor, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txtRelSec, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -111,7 +113,7 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtRelSec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtRelSetor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -135,7 +137,7 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
            
        if(confirma == JOptionPane.YES_OPTION){
            HashMap filtro = new HashMap();
-           filtro.put("SEC", txtRelSec.getText());
+           filtro.put("SEC", cbSecretaria.getSelectedItem().toString());
            
                  
            filtro.put("MES", txtRelCom.getText().substring(1, 3));
@@ -162,11 +164,11 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVisualizar;
+    private javax.swing.JComboBox<String> cbSecretaria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     public static javax.swing.JFormattedTextField txtRelCom;
-    private javax.swing.JTextField txtRelSec;
     private javax.swing.JTextField txtRelSetor;
     // End of variables declaration//GEN-END:variables
 }

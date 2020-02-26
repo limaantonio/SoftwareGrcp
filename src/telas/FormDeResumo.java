@@ -37,11 +37,11 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        txtResSec = new javax.swing.JTextField();
         txtResSetor = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         btnVisualizar = new javax.swing.JButton();
         txtResCom = new javax.swing.JFormattedTextField();
+        cbSecretaria = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setTitle("Resumos");
@@ -73,6 +73,8 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
             ex.printStackTrace();
         }
 
+        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -93,9 +95,9 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtResSec, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(txtResCom, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtResSetor, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(txtResSetor, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(124, 124, 124))))
         );
         layout.setVerticalGroup(
@@ -108,7 +110,7 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtResSec, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -132,7 +134,7 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
            
        if(confirma == JOptionPane.YES_OPTION){
            HashMap filtro = new HashMap();
-           filtro.put("SEC", txtResSec.getText());
+           filtro.put("SEC", cbSecretaria.getSelectedItem().toString());
            filtro.put("MES", txtResCom.getText().substring(1, 3));
            filtro.put("ANO", txtResCom.getText().substring(3, 7));
            try{
@@ -151,11 +153,11 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnVisualizar;
+    private javax.swing.JComboBox<String> cbSecretaria;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     public static javax.swing.JFormattedTextField txtResCom;
-    private javax.swing.JTextField txtResSec;
     private javax.swing.JTextField txtResSetor;
     // End of variables declaration//GEN-END:variables
 }

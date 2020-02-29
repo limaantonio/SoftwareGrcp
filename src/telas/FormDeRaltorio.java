@@ -41,26 +41,17 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        txtRelSetor = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         btnVisualizar = new javax.swing.JButton();
         txtRelCom = new javax.swing.JFormattedTextField();
         cbSecretaria = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
 
         setClosable(true);
         setTitle("Guias");
         setToolTipText("");
 
         jLabel1.setText("Secretaria");
-
-        jLabel2.setText("Setor");
-
-        txtRelSetor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtRelSetorActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("Competência");
 
@@ -92,6 +83,9 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
 
         cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
 
+        jLabel4.setText("*Você tamém pode imprimir as Guias por Secretarias");
+        jLabel4.setOpaque(true);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -106,14 +100,12 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(btnVisualizar)
                         .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel1)
-                                .addComponent(jLabel2))
+                            .addComponent(jLabel1)
                             .addGap(36, 36, 36)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(txtRelSetor, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(20, Short.MAX_VALUE))
+                            .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(101, 101, 101)))
+                    .addComponent(jLabel4))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -122,25 +114,19 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(txtRelCom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addComponent(jLabel4)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtRelSetor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(51, 51, 51)
+                .addGap(45, 45, 45)
                 .addComponent(btnVisualizar)
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
         setBounds(480, 150, 383, 274);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtRelSetorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRelSetorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtRelSetorActionPerformed
 
     private void btnVisualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVisualizarActionPerformed
        int confirma = JOptionPane.showConfirmDialog(null, "Confirma a impressão?",
@@ -159,7 +145,7 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
            try{
                Connection connection = ModuloConexao.conector();
                JasperPrint print = JasperFillManager.fillReport(
-                        "/home/carlos/NetBeansProjects/Grcp/src/relatorios/GrcpTodas.jasper",
+                        "/home/carlos/NetBeansProjects/Grcp/src/relatorios/Grcp.jasper",
                        filtro,
                        connection);
                JasperViewer.viewReport(print, false);       
@@ -182,9 +168,8 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnVisualizar;
     private javax.swing.JComboBox<String> cbSecretaria;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     public static javax.swing.JFormattedTextField txtRelCom;
-    private javax.swing.JTextField txtRelSetor;
     // End of variables declaration//GEN-END:variables
 }

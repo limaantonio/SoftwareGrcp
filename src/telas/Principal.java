@@ -154,6 +154,7 @@ public class Principal extends javax.swing.JFrame {
         });
         menuArquivo.add(jMenuItem1);
 
+        itemMenuCadSec.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         itemMenuCadSec.setText("Secretárias");
         itemMenuCadSec.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -162,6 +163,7 @@ public class Principal extends javax.swing.JFrame {
         });
         menuArquivo.add(itemMenuCadSec);
 
+        jMenuItem7.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem7.setText("Setores");
         jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

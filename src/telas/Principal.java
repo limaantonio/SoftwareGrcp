@@ -76,6 +76,9 @@ public class Principal extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         menuArquivo = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
+        itemMenuCadSec = new javax.swing.JMenuItem();
+        jMenuItem7 = new javax.swing.JMenuItem();
+        jMenu3 = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
@@ -140,16 +143,36 @@ public class Principal extends javax.swing.JFrame {
         jToolBar1.add(btnResumo);
 
         menuArquivo.setMnemonic('a');
-        menuArquivo.setText("Arquivo");
+        menuArquivo.setText("Cadastros");
 
         jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setText("Cadastro");
+        jMenuItem1.setText("Guias");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem1ActionPerformed(evt);
             }
         });
         menuArquivo.add(jMenuItem1);
+
+        itemMenuCadSec.setText("Secretárias");
+        itemMenuCadSec.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemMenuCadSecActionPerformed(evt);
+            }
+        });
+        menuArquivo.add(itemMenuCadSec);
+
+        jMenuItem7.setText("Setores");
+        jMenuItem7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem7ActionPerformed(evt);
+            }
+        });
+        menuArquivo.add(jMenuItem7);
+
+        jMenuBar1.add(menuArquivo);
+
+        jMenu3.setText("Consultas");
 
         jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
         jMenuItem2.setText("Banco de Dados");
@@ -158,9 +181,9 @@ public class Principal extends javax.swing.JFrame {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        menuArquivo.add(jMenuItem2);
+        jMenu3.add(jMenuItem2);
 
-        jMenuBar1.add(menuArquivo);
+        jMenuBar1.add(jMenu3);
 
         jMenu2.setText("Relatórios");
 
@@ -278,6 +301,18 @@ public class Principal extends javax.swing.JFrame {
       desktop.add(form);
     }//GEN-LAST:event_btnResumoActionPerformed
 
+    private void itemMenuCadSecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuCadSecActionPerformed
+        FormCasdatroSecretaria form = new FormCasdatroSecretaria();
+        form.setVisible(true);
+        desktop.add(form);
+    }//GEN-LAST:event_itemMenuCadSecActionPerformed
+
+    private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
+        FormCasdatroSetor form = new FormCasdatroSetor();
+        form.setVisible(true);
+        desktop.add(form);
+    }//GEN-LAST:event_jMenuItem7ActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -319,15 +354,18 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnBfPesquisa;
     private javax.swing.JButton btnResumo;
     public static javax.swing.JDesktopPane desktop;
+    private javax.swing.JMenuItem itemMenuCadSec;
     private javax.swing.JMenuItem itemMenuData;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;

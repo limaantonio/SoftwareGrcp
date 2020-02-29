@@ -25,6 +25,10 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
      */
     public FormDeRaltorio() {
         initComponents();
+        //setar curso
+       javax.swing.SwingUtilities.invokeLater(new Runnable() { 
+           public void run() { txtRelCom.requestFocusInWindow(); }
+       });
     }
 
     /**
@@ -79,6 +83,7 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
         } catch (java.text.ParseException ex) {
             ex.printStackTrace();
         }
+        txtRelCom.setFocusCycleRoot(true);
         txtRelCom.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtRelComActionPerformed(evt);

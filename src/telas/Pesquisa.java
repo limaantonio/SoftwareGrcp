@@ -25,6 +25,7 @@ import static telas.NovaGuia.txtId;
 import static telas.NovaGuia.txtNumero;
 
 import static telas.NovaGuia.cbSecretaria;
+import static telas.NovaGuia.cbSetor;
 import static telas.NovaGuia.txtData;
 import static telas.NovaGuia.txtObservacao;
 import static telas.NovaGuia.txtTotalGeral;
@@ -51,12 +52,20 @@ public class Pesquisa extends javax.swing.JInternalFrame {
     
     public Pesquisa() {
         initComponents();
-         connection = ModuloConexao.conector();
+        connection = ModuloConexao.conector();
+         btOk.setMnemonic(KeyEvent.VK_ENTER); //TECLA DE ATALHO
+         tbCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
+         
     }
     
     public void pesquisar(){
         
-        String sql = "SELECT *FROM tbGuias WHERE GUI_NUMERO LIKE ?";
+        String sql = "SELECT GUIAS.GUI_ID, GUI_NUMERO, GUI_BASE,"
+                    + " GUI_VALOR_SERVIDOR, GUI_VALOR_PATRONAL,"
+                    + " GUI_VALOR_SUPLEMENTAR, GUI_DATA_CADASTRO,"
+                    + " SEC.SEC_NOME FROM tbGuias AS GUIAS INNER JOIN"
+                    + " tbSecretaria AS SEC ON (SEC.SEC_ID = SecretariaId)"
+                    + " where GUIAS.GUI_NUMERO LIKE ?";
        
         try{
             pst = connection.prepareStatement(sql);
@@ -70,7 +79,7 @@ public class Pesquisa extends javax.swing.JInternalFrame {
         }
               
         int setar = tbGuias.getSelectedRow();
-         
+     
     }
     
     public void setarC() throws ParseException{
@@ -82,21 +91,21 @@ public class Pesquisa extends javax.swing.JInternalFrame {
        
         txtId.setText(tbGuias.getModel().getValueAt(setar, 0).toString());
         txtNumero.setText(tbGuias.getModel().getValueAt(setar, 1).toString());
-        cbSecretaria.setSelectedItem(tbGuias.getModel().getValueAt(setar, 2).toString());
-        txtBaseCalculo.setText(tbGuias.getModel().getValueAt(setar, 3).toString());
+       
+        txtBaseCalculo.setText(tbGuias.getModel().getValueAt(setar, 2).toString());
         //txtVencimento.setText(tbGuias.getModel().getValueAt(setar, 4).toString());
-        txtValServidor.setText(tbGuias.getModel().getValueAt(setar, 4).toString());
-        txtValPatronal.setText(tbGuias.getModel().getValueAt(setar, 5).toString());
-        txtValSuplementar.setText(tbGuias.getModel().getValueAt(setar, 6).toString());
-        txtObservacao.setText(tbGuias.getModel().getValueAt(setar, 7).toString());
-        
+        txtValServidor.setText(tbGuias.getModel().getValueAt(setar, 3).toString());
+        txtValPatronal.setText(tbGuias.getModel().getValueAt(setar, 4).toString());
+        txtValSuplementar.setText(tbGuias.getModel().getValueAt(setar, 5).toString());
+        txtObservacao.setText(tbGuias.getModel().getValueAt(setar, 6).toString());
         
         SimpleDateFormat sdf = new  SimpleDateFormat("dd/MM/yyyy");
-        String data = sdf.format(Date.valueOf(tbGuias.getModel().getValueAt(setar, 8).toString()));
+        String data = sdf.format(Date.valueOf(tbGuias.getModel().getValueAt(setar, 7).toString()));
         txtData.setText(data.toString());
         
+        cbSecretaria.setSelectedItem(tbGuias.getModel().getValueAt(setar, 8).toString());
+        cbSetor.setSelectedItem(tbGuias.getModel().getValueAt(setar, 9).toString());
         
-       
         
         v1 = v1 + v2;
         v3 = v3 + v1;
@@ -144,6 +153,9 @@ public class Pesquisa extends javax.swing.JInternalFrame {
             }
         });
         addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                formKeyTyped(evt);
+            }
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
             }
@@ -196,7 +208,7 @@ public class Pesquisa extends javax.swing.JInternalFrame {
         });
 
         tbCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/icons8-cancelar-24.png"))); // NOI18N
-        tbCancelar.setText("Cancelar");
+        tbCancelar.setText("Fechar");
         tbCancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 tbCancelarActionPerformed(evt);
@@ -262,14 +274,19 @@ public class Pesquisa extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tbCancelarActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        // TODO add your handling code here:
-        btOk.setMnemonic(KeyEvent.VK_ENTER); //TECLA DE ATALHO
-        tbCancelar.setMnemonic(KeyEvent.VK_ESCAPE);
+    
+         
+       
+        
     }//GEN-LAST:event_formKeyPressed
 
     private void formInternalFrameClosed(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameClosed
         // TODO add your handling code here:
     }//GEN-LAST:event_formInternalFrameClosed
+
+    private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
+       
+    }//GEN-LAST:event_formKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

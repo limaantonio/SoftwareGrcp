@@ -42,6 +42,10 @@ public class NovaGuia extends javax.swing.JInternalFrame {
     public NovaGuia() {
         initComponents();
         connection = ModuloConexao.conector();
+         //setar curso
+       javax.swing.SwingUtilities.invokeLater(new Runnable() { 
+           public void run() { txtData.requestFocusInWindow(); }
+       });
         
     }
     
@@ -73,43 +77,73 @@ public class NovaGuia extends javax.swing.JInternalFrame {
        Double vTp = vP + vSp;
        Double vTg = vS + vTp;
        
+       String id = null;
+       String idGui = "SELECT max(GUI_ID) from tbGuias";
        
-       
-       
-    
-        String sql = "INSERT INTO tbGuias (GUI_NUMERO,  GUI_SECRETARIA, GUI_BASE, GUI_VALOR_"
-                + "SERVIDOR, GUI_VALOR_PATRONAL, GUI_VALOR_SUPLEMENTAR, GUI_OBSERVACAO, GUI_DATA_CADASTRO)"
-                + "VALUES (?,?,?,?,?,?,?, ?)";
+        try {
+            pst = connection.prepareStatement(idGui);
+            rs = pst.executeQuery();
+           
+            if(rs.next()){
+                id =  rs.getString(1);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+           // System.out.println(id);
+        }
         
-        
-        
+        String idS = null;
+        String idSec = "SELECT min(SEC_ID) from tbSecretaria";
+        try {
+            pst = connection.prepareStatement(idSec);
+            rs = pst.executeQuery();
+            
+            if(rs.next()){
+                idS =  rs.getString(1);       
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+           // System.out.println(id);
+        }
+        String sql = "INSERT INTO tbGuias ("
+                + " GUI_NUMERO,"
+                + " GUI_BASE,"
+                + " GUI_VALOR_SERVIDOR,"
+                + " GUI_VALOR_PATRONAL,"
+                + " GUI_VALOR_SUPLEMENTAR,"
+                + " GUI_OBSERVACAO,"
+                + " GUI_DATA_CADASTRO,"
+                + " SecretariaId)"
+                + "VALUES (?,?,?,?,?,?,?,?)";
         
         System.out.println(txtBaseCalculo.getText().replace("R$", "")
                         .replace(".", "").replace(",", ".").replace(" ", ""));
         
         
-        
         try{
-           
-            Integer n = retornaId();
-            n++;
-            System.out.println(n);
+            Integer num = Integer.parseInt(id) + 1;
             pst = connection.prepareStatement(sql);
-            pst.setString(1, n.toString());
+            pst.setString(1, num.toString());
            // if(txtNumero i)
-            pst.setString(2, cbSecretaria.getSelectedItem().toString());
-            pst.setString(3, txtBaseCalculo.getText().replace("R$", "")
+            
+            pst.setString(2, txtBaseCalculo.getText().replace("R$", "")
                         .replace(".", "").replace(",", ".").replace(" ", ""));
-            pst.setString(4, vS.toString());
-            pst.setString(5, vP.toString());
-            pst.setString(6, vSp.toString());
-            pst.setString(7, txtObservacao.getText());
+            pst.setString(3, vS.toString());
+            pst.setString(4, vP.toString());
+            pst.setString(5, vSp.toString());
+            pst.setString(6, txtObservacao.getText());
+            
            
             SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");  
             java.util.Date data = formatador.parse(txtData.getText());
           
-            pst.setDate(8, new java.sql.Date(data.getTime()));
-         
+            pst.setDate(7, new java.sql.Date(data.getTime()));
+            
+            
+            Integer idParSec = Integer.parseInt(idS) + cbSecretaria.getSelectedIndex();
+            System.out.println("id adf= " +idParSec.toString());
+            pst.setString(8, idParSec.toString());
+            
             //mostra no campo o valor gerado 
             
             txtValServidor.setText(vS.toString());
@@ -117,7 +151,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             txtValSuplementar.setText(vSp.toString());
             txtTotalPatronal.setText(vTp.toString());
             txtTotalGeral.setText(vTg.toString());
-            txtNumero.setText(n.toString());
+            txtNumero.setText(num.toString());
           
             
             int resposta = JOptionPane.showConfirmDialog(null,
@@ -133,6 +167,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             
             if(salvo >0){
                 JOptionPane.showMessageDialog(null, "Dados salvo com sucesso.");
+                
             }
            
         }catch(Exception e){
@@ -234,7 +269,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         txtTotalPatronal.setText(null);
         txtTotalGeral.setText(null);
         txtObservacao.setText(null);
-        txtData.setText(null);
+        //txtData.setText(null);
         btnSalvar.setEnabled(true);
 }
     
@@ -258,6 +293,89 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                  System.out.println(e);
             }
         } 
+    }
+    
+    public void setarComboboxSetor(){
+        
+        String minId = null;
+        String idSec = "SELECT min(SEC_ID) from tbSecretaria";
+        
+         try {
+            pst = connection.prepareStatement(idSec);
+            rs = pst.executeQuery();
+           
+            if(rs.next()){
+                minId =  rs.getString(1);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+           // System.out.println(id);
+        }
+         
+        String sql = "SELECT"
+                + " SETOR.SET_NOME"
+                + " FROM tbSecretaria AS SEC"
+                + " INNER JOIN tbSetor AS SETOR"
+                + " ON (SEC.SEC_ID = SETOR.SecretariaId)"
+                + " WHERE SEC_ID = ?";
+   
+        try {
+            Integer i = Integer.parseInt(minId.toString()) + cbSecretaria.getSelectedIndex();
+            
+            pst = connection.prepareStatement(sql);
+            pst.setString(1, i.toString());
+            rs = pst.executeQuery();
+     
+            while(rs.next()){
+               
+              cbSetor.addItem(rs.getString(1));
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    public void setarCombos(String id){
+        String sql = "SELECT"
+               
+                + " SETOR.SET_NOME"
+                + " FROM tbSecretaria AS SEC"
+                + " INNER JOIN tbSetor AS SETOR"
+                + " ON (SEC.SEC_ID = SETOR.SecretariaId)"
+                + " WHERE SEC_ID = ?";
+        
+                 try {
+           
+         
+            pst = connection.prepareStatement(sql);
+            pst.setString(1, id);
+            rs = pst.executeQuery();
+     
+                while(rs.next()){
+                   
+                    cbSetor.addItem(rs.getString(1));
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
+    }
+    
+    public void setarComboboxSecretaria(){
+      
+       
+        String sql = "SELECT *FROM tbSecretaria";
+       
+        try {
+            pst = connection.prepareStatement(sql);
+            rs = pst.executeQuery();
+            
+            while(rs.next()){
+               cbSecretaria.addItem(rs.getString(2));
+            }
+        } catch (Exception e) {
+            
+        }
+       
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -298,11 +416,14 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         jLabel12 = new javax.swing.JLabel();
         txtData = new javax.swing.JFormattedTextField();
         cbSecretaria = new javax.swing.JComboBox<>();
+        cbSetor = new javax.swing.JComboBox<>();
+        jLabel13 = new javax.swing.JLabel();
 
         setClosable(true);
         setTitle("Cadastro");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
             }
             public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
                 formInternalFrameClosing(evt);
@@ -403,6 +524,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             }
         });
 
+        txtNumero.setEnabled(false);
         txtNumero.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNumeroActionPerformed(evt);
@@ -496,7 +618,35 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             }
         });
 
-        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
+        cbSecretaria.setFocusCycleRoot(true);
+        cbSecretaria.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbSecretariaItemStateChanged(evt);
+            }
+        });
+        cbSecretaria.addHierarchyListener(new java.awt.event.HierarchyListener() {
+            public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
+                cbSecretariaHierarchyChanged(evt);
+            }
+        });
+        cbSecretaria.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cbSecretariaFocusGained(evt);
+            }
+        });
+        cbSecretaria.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                cbSecretariaMousePressed(evt);
+            }
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbSecretariaMouseClicked(evt);
+            }
+        });
+        cbSecretaria.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                cbSecretariaComponentShown(evt);
+            }
+        });
         cbSecretaria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbSecretariaActionPerformed(evt);
@@ -507,6 +657,22 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                 cbSecretariaKeyPressed(evt);
             }
         });
+
+        cbSetor.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                cbSetorFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                cbSetorFocusLost(evt);
+            }
+        });
+        cbSetor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbSetorActionPerformed(evt);
+            }
+        });
+
+        jLabel13.setText("Setor:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -523,113 +689,127 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                         .addComponent(btnAlterar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnNovo)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                         .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtObservacao, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7)
+                            .addComponent(jLabel7))
+                        .addGap(0, 248, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel10)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel4)
-                                            .addComponent(jLabel2)
-                                            .addComponent(jLabel10)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addComponent(jLabel8)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jLabel1)))
+                                        .addComponent(jLabel8)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                            .addComponent(txtNumero)
-                                            .addComponent(txtTotalPatronal, javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtBaseCalculo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
-                                            .addComponent(txtValPatronal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)))
+                                        .addComponent(jLabel1)))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtNumero)
+                                    .addComponent(txtTotalPatronal, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtBaseCalculo, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)
+                                    .addComponent(txtValPatronal, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 88, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
+                                .addComponent(txtVencimento, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(jLabel12)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtData, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)))
-                                .addGap(62, 62, 62)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jLabel3)
-                                                .addComponent(jLabel5)
-                                                .addComponent(jLabel11))
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jLabel9)
-                                            .addGap(55, 55, 55)))
+                                        .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel6))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addGap(66, 66, 66)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtValServidor)
-                                        .addComponent(txtTotalGeral)
-                                        .addComponent(txtValSuplementar)
-                                        .addComponent(txtVencimento, javax.swing.GroupLayout.DEFAULT_SIZE, 90, Short.MAX_VALUE)))))
-                        .addGap(0, 124, Short.MAX_VALUE)))
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel3)
+                                            .addComponent(jLabel5)
+                                            .addComponent(jLabel11))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(txtValServidor)
+                                            .addComponent(txtTotalGeral)
+                                            .addComponent(txtValSuplementar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(18, 18, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel13)
+                                .addGap(18, 18, 18)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbSetor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbSecretaria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel8)
-                            .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel2)
-                                .addComponent(txtBaseCalculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel3))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(15, 15, 15)
-                                .addComponent(txtValPatronal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel4))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(txtValServidor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtValSuplementar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel5))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
+                        .addGap(41, 41, 41)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel11)
-                            .addComponent(txtTotalGeral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(42, 118, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtTotalPatronal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel10)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel8)
+                                    .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel12)
+                                    .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel6))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(txtBaseCalculo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(15, 15, 15)
+                                        .addComponent(txtValPatronal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel4)))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(36, 36, 36))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txtValServidor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                            .addComponent(txtValSuplementar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel5))))
+                                .addGap(20, 20, 20)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel11)
+                                    .addComponent(txtTotalGeral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel9)
+                            .addComponent(txtVencimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtTotalPatronal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel12)
-                    .addComponent(txtData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9)
-                    .addComponent(txtVencimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jLabel13)
+                            .addComponent(cbSetor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(9, 9, 9)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtObservacao, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -641,15 +821,11 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                     .addComponent(btnNovo)
                     .addComponent(jButton3)
                     .addComponent(jButton2))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
 
-        setBounds(300, 100, 710, 435);
+        setBounds(300, 100, 718, 435);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdActionPerformed
 
     private void txtObservacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtObservacaoActionPerformed
         // TODO add your handling code here:
@@ -734,7 +910,10 @@ public class NovaGuia extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtVencimentoActionPerformed
 
     private void cbSecretariaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSecretariaActionPerformed
-        // TODO add your handling code here:
+
+    
+   
+       
     }//GEN-LAST:event_cbSecretariaActionPerformed
 
     private void txtNumeroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroActionPerformed
@@ -743,9 +922,54 @@ public class NovaGuia extends javax.swing.JInternalFrame {
 
     private void cbSecretariaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbSecretariaKeyPressed
         
-       
-        
     }//GEN-LAST:event_cbSecretariaKeyPressed
+
+    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdActionPerformed
+
+    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        setarComboboxSecretaria();   
+    }//GEN-LAST:event_formInternalFrameOpened
+
+    private void cbSetorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSetorActionPerformed
+          
+    }//GEN-LAST:event_cbSetorActionPerformed
+
+    private void cbSecretariaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbSecretariaFocusGained
+        cbSetor.removeAllItems();
+
+    }//GEN-LAST:event_cbSecretariaFocusGained
+
+    private void cbSetorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbSetorFocusLost
+        
+    }//GEN-LAST:event_cbSetorFocusLost
+
+    private void cbSetorFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_cbSetorFocusGained
+        setarComboboxSetor();
+    }//GEN-LAST:event_cbSetorFocusGained
+
+    private void cbSecretariaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbSecretariaMouseClicked
+       
+    }//GEN-LAST:event_cbSecretariaMouseClicked
+
+    private void cbSecretariaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbSecretariaItemStateChanged
+      
+    }//GEN-LAST:event_cbSecretariaItemStateChanged
+
+    private void cbSecretariaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbSecretariaMousePressed
+        
+    }//GEN-LAST:event_cbSecretariaMousePressed
+
+    private void cbSecretariaComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_cbSecretariaComponentShown
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_cbSecretariaComponentShown
+
+    private void cbSecretariaHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_cbSecretariaHierarchyChanged
+        // TODO add your handling code here:
+       
+    }//GEN-LAST:event_cbSecretariaHierarchyChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -754,12 +978,14 @@ public class NovaGuia extends javax.swing.JInternalFrame {
     public static javax.swing.JButton btnNovo;
     public static javax.swing.JButton btnSalvar;
     public static javax.swing.JComboBox<String> cbSecretaria;
+    public static javax.swing.JComboBox<String> cbSetor;
     public static javax.swing.JButton jButton2;
     public static javax.swing.JButton jButton3;
     public static javax.swing.JLabel jLabel1;
     public static javax.swing.JLabel jLabel10;
     public static javax.swing.JLabel jLabel11;
     public static javax.swing.JLabel jLabel12;
+    public static javax.swing.JLabel jLabel13;
     public static javax.swing.JLabel jLabel2;
     public static javax.swing.JLabel jLabel3;
     public static javax.swing.JLabel jLabel4;

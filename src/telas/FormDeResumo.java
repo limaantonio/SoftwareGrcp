@@ -26,7 +26,10 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
      */
     public FormDeResumo() {
         initComponents();
-       
+         //setar curso
+       javax.swing.SwingUtilities.invokeLater(new Runnable() { 
+           public void run() { txtResCom.requestFocusInWindow(); }
+       });
          
     }
     

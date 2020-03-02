@@ -150,7 +150,7 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
                        connection);
                JasperViewer.viewReport(print, false);       
            }catch(Exception e){
-               JOptionPane.showMessageDialog(null, e);
+               JOptionPane.showMessageDialog(null, "Relatório não encontrado. Verifique se essa competência está cadastrada");
            }
        }
     }//GEN-LAST:event_btnVisualizarActionPerformed

@@ -64,24 +64,16 @@ public class Pesquisa extends javax.swing.JInternalFrame {
         String sql = "SELECT GUIAS.GUI_ID, GUI_NUMERO, GUI_BASE,"
                     + " GUI_VALOR_SERVIDOR, GUI_VALOR_PATRONAL,"
                     + " GUI_VALOR_SUPLEMENTAR, GUI_OBSERVACAO, GUI_DATA_CADASTRO,"
-                    + " SEC.SEC_NOME, SET_NOME"
+                    + " SEC.SEC_NOME, SET_NOME, SET_TIPO"
                     + " FROM tbGuias AS GUIAS"
-                    + " INNER JOIN tbSecretaria AS SEC"
-                    + " ON (SEC.SEC_ID = SecretariaId)"
                     + " INNER JOIN tbSetor AS SETOR"
+                    + " ON (SETOR.SET_ID = SetorId)"
+                    + " INNER JOIN tbSecretaria AS SEC"
                     + " ON (SEC.SEC_ID = SETOR.SecretariaId)"
                     + " where GUIAS.GUI_NUMERO LIKE ?";
+         
         
-        
-//      	GUIAS.GUI_ID, GUI_NUMERO, GUI_VALOR_SERVIDOR,
-//    SEC.SEC_ID, SEC_NOME, SET_NOME
-//    FROM tbGuias AS GUIAS
-//    INNER JOIN tbSecretaria AS SEC
-//    ON (SEC.SEC_ID = SecretariaId)
-//    INNER JOIN tbSetor AS SETOR
-//    ON (SEC.SEC_ID = SETOR.SecretariaId)
-//    where GUI_NUMERO LIKE 3;
-//       
+
         try{
             pst = connection.prepareStatement(sql);
             pst.setString(1, txtPesquisar.getText() + "%");
@@ -117,6 +109,9 @@ public class Pesquisa extends javax.swing.JInternalFrame {
         SimpleDateFormat sdf = new  SimpleDateFormat("dd/MM/yyyy");
         String data = sdf.format(Date.valueOf(tbGuias.getModel().getValueAt(setar, 7).toString()));
         txtData.setText(data.toString());
+        
+        String data1 = sdf.format(Date.valueOf(tbGuias.getModel().getValueAt(setar, 7).toString()));
+        txtVencimento.setText(data.toString());
        
         cbSecretaria.setSelectedItem(tbGuias.getModel().getValueAt(setar, 8).toString());
 
@@ -181,23 +176,23 @@ public class Pesquisa extends javax.swing.JInternalFrame {
 
         tbGuias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Número", "Base de Cálculo", "Valor Servidor", "Valor Patronal", "Total Patronal", "Total Geral", "Observação", "Data de Cadastro", "Secretaria", "Setor"
+                "Id", "Número", "Base de Cálculo", "Valor Servidor", "Valor Patronal", "Total Patronal", "Total Geral", "Observação", "Data de Cadastro", "Secretaria", "Setor", "Tipo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true, true, true, false, true
+                false, false, false, false, false, false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -242,16 +237,15 @@ public class Pesquisa extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 816, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btOk, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(27, 27, 27)
                         .addComponent(tbCancelar)
-                        .addGap(136, 136, 136)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 191, Short.MAX_VALUE)))
+                        .addComponent(txtPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(

@@ -5,27 +5,37 @@
  */
 package telas;
 
+import java.sql.*;
 import dao.ModuloConexao;
 import java.awt.event.KeyEvent;
+import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
 
+
 /**
  *
  * @author carlos
  */
+    
 public class FormDeRaltorio extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form FormDeRaltorioSecretaria
      */
+    Connection connection = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
     public FormDeRaltorio() {
         initComponents();
         //setar curso
+         connection = ModuloConexao.conector();
        javax.swing.SwingUtilities.invokeLater(new Runnable() { 
            public void run() { txtRelCom.requestFocusInWindow(); }
        });
@@ -50,6 +60,23 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
         setClosable(true);
         setTitle("Guias");
         setToolTipText("");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jLabel1.setText("Secretaria");
 
@@ -81,7 +108,7 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
             }
         });
 
-        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
+        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         jLabel4.setText("*Você tamém pode imprimir as Guias por Secretarias");
         jLabel4.setOpaque(true);
@@ -92,20 +119,24 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtRelCom, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(btnVisualizar)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addGap(36, 36, 36)
-                            .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(101, 101, 101)))
-                    .addComponent(jLabel4))
-                .addContainerGap(13, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtRelCom, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel4))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(36, 36, 36)
+                        .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(100, 100, 100))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnVisualizar)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -120,9 +151,9 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(cbSecretaria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(45, 45, 45)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addComponent(btnVisualizar)
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         setBounds(480, 150, 383, 274);
@@ -138,23 +169,42 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
            filtro.put("SEC", cbSecretaria.getSelectedItem().toString());
            
                  
-           filtro.put("MES", txtRelCom.getText().substring(1, 3));
+           filtro.put("MES", txtRelCom.getText().substring(0, 2));
            filtro.put("ANO", txtRelCom.getText().substring(3, 7));
-          
            
+          
+           InputStream rep = getClass().getResourceAsStream("Grcp.jasper");
            try{
                Connection connection = ModuloConexao.conector();
                JasperPrint print = JasperFillManager.fillReport(
-                        "/home/carlos/NetBeansProjects/Grcp/src/relatorios/Grcp.jasper",
+                       rep,
                        filtro,
                        connection);
                JasperViewer.viewReport(print, false);       
            }catch(Exception e){
+               System.out.println(filtro);
                JOptionPane.showMessageDialog(null, "Relatório não encontrado. Verifique se essa competência está cadastrada");
            }
        }
     }//GEN-LAST:event_btnVisualizarActionPerformed
 
+     public void setarComboboxSecretaria(){
+      
+       
+        String sql = "SELECT *FROM tbSecretaria";
+       
+        try {
+            pst = connection.prepareStatement(sql);
+            rs = pst.executeQuery();
+            
+            while(rs.next()){
+               cbSecretaria.addItem(rs.getString(2));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+       
+    }
     private void txtRelComActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtRelComActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtRelComActionPerformed
@@ -162,6 +212,10 @@ public class FormDeRaltorio extends javax.swing.JInternalFrame {
     private void btnVisualizarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnVisualizarKeyPressed
        btnVisualizar.setMnemonic(KeyEvent.VK_ENTER); //TECLA DE ATALHO
     }//GEN-LAST:event_btnVisualizarKeyPressed
+
+    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        setarComboboxSecretaria();
+    }//GEN-LAST:event_formInternalFrameOpened
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

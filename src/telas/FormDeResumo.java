@@ -7,7 +7,10 @@ package telas;
 
 import dao.ModuloConexao;
 import java.awt.event.KeyEvent;
+import java.io.InputStream;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -24,9 +27,13 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
     /**
      * Creates new form FormDeRaltorioSecretaria
      */
+    Connection connection = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
     public FormDeResumo() {
         initComponents();
          //setar curso
+         connection = ModuloConexao.conector();
        javax.swing.SwingUtilities.invokeLater(new Runnable() { 
            public void run() { txtResCom.requestFocusInWindow(); }
        });
@@ -53,6 +60,23 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
         setClosable(true);
         setTitle("Resumos");
         setToolTipText("");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jLabel1.setText("Secretaria");
 
@@ -78,7 +102,7 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
             ex.printStackTrace();
         }
 
-        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Administração", "Desporto", "Educação", "Infraestrutura", "Saúde" }));
+        cbSecretaria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " " }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -127,12 +151,13 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
        if(confirma == JOptionPane.YES_OPTION){
            HashMap filtro = new HashMap();
            filtro.put("SEC", cbSecretaria.getSelectedItem().toString());
-           filtro.put("MES", txtResCom.getText().substring(1, 3));
+           filtro.put("MES", txtResCom.getText().substring(0, 2));
            filtro.put("ANO", txtResCom.getText().substring(3, 7));
            try{
+               InputStream rep = getClass().getResourceAsStream("GrcpResumos.jasper");
                Connection connection = ModuloConexao.conector();
                JasperPrint print = JasperFillManager.fillReport(
-                        "/home/carlos/NetBeansProjects/Grcp/src/relatorios/GrcpResumos.jasper",
+                       rep,
                        filtro,
                        connection);
                JasperViewer.viewReport(print, false);       
@@ -142,9 +167,31 @@ public class FormDeResumo extends javax.swing.JInternalFrame {
        }
     }//GEN-LAST:event_btnVisualizarActionPerformed
 
+    public void setarComboboxSecretaria(){
+      
+       
+        String sql = "SELECT *FROM tbSecretaria";
+       
+        try {
+            pst = connection.prepareStatement(sql);
+            rs = pst.executeQuery();
+            
+            while(rs.next()){
+               cbSecretaria.addItem(rs.getString(2));
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+       
+    }
     private void btnVisualizarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnVisualizarKeyPressed
         btnVisualizar.setMnemonic(KeyEvent.VK_ENTER); //TECLA DE ATALHO
     }//GEN-LAST:event_btnVisualizarKeyPressed
+
+    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+        // TODO add your handling code here:
+        setarComboboxSecretaria();
+    }//GEN-LAST:event_formInternalFrameOpened
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -17,19 +17,19 @@ import javax.swing.JOptionPane;
 public class ModuloConexao {
     
     public static java.sql.Connection conector (){
-       java.sql.Connection conexao = null;
-       String driver = "com.mysql.jdbc.Driver";
-       String url = "jdbc:mysql://localhost:3306/bdGrcp";
-       String user = "root";
-       String password = "Pizz@2000";
+        java.sql.Connection conexao = null;
+        String driver = "org.sqlite.JDBC";
+        String url = "jdbc:sqlite:banco/bdGrcp.db";
        
        try{
            Class.forName(driver);
-           conexao = DriverManager.getConnection(url, user, password);
+           conexao = DriverManager.getConnection(url);
+           
            return conexao;
            
        }catch(Exception e){
-           JOptionPane.showMessageDialog(null, "Não foi possivel conectar-se o banco de dados.");
+           e.printStackTrace();
+             JOptionPane.showMessageDialog(null, e);
            return null;
        }
     }

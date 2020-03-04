@@ -23,6 +23,7 @@ import static telas.NovaGuia.txtTotalPatronal;
 import static telas.NovaGuia.txtValPatronal;
 import static telas.NovaGuia.txtValServidor;
 import static telas.NovaGuia.txtValSuplementar;
+import static telas.NovaGuia.txtVencimento;
 import static telas.Principal.desktop;
 
 /**
@@ -281,9 +282,9 @@ public class BancoDeDados extends javax.swing.JInternalFrame {
         txtObservacao.setText(tbBanco.getModel().getValueAt(setar, 7).toString());
         
         
-        SimpleDateFormat sdf = new  SimpleDateFormat("dd/MM/yyyy");
-        String data = sdf.format(Date.valueOf(tbBanco.getModel().getValueAt(setar, 8).toString()));
-        txtData.setText(data.toString());
+       txtData.setText(tbBanco.getModel().getValueAt(setar, 8).toString());
+       
+        txtVencimento.setText(tbBanco.getModel().getValueAt(setar, 9).toString());
         v1 = v1 + v2;
         v3 = v3 + v1;
         

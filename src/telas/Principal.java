@@ -8,7 +8,7 @@ package telas;
 import dao.ModuloConexao;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.sql.Connection;
+import java.sql.*;
 import javax.swing.JInternalFrame;
 import java.awt.Image;
 import java.awt.Graphics;
@@ -41,7 +41,30 @@ public class Principal extends javax.swing.JFrame {
         initComponents();
         setExtendedState(MAXIMIZED_BOTH);
         
-        connection = ModuloConexao.conector();
+        
+    }
+    
+     public void backup() throws SQLException{
+        try {
+            connection = ModuloConexao.conector();
+            Statement start = connection.createStatement();
+            start.executeUpdate("backup to bdGrcp.db");
+            JOptionPane.showMessageDialog(null, "Backup Realizado com sucesso.");
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+    
+    public void restoreBackup(){
+         try {
+              connection = ModuloConexao.conector();
+            Statement start = connection.createStatement();
+            start.executeUpdate("restore from bdGrcp.db");
+            JOptionPane.showMessageDialog(null, "Dados restaurados com sucesso.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
     }
     
    
@@ -57,6 +80,7 @@ public class Principal extends javax.swing.JFrame {
 
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
+        jMenuItem4 = new javax.swing.JMenuItem();
         ImageIcon icon = new ImageIcon(getClass().getResource("/imagens/background.jpg"));
         final Image image = icon.getImage();
         desktop = new javax.swing.JDesktopPane(){
@@ -84,8 +108,10 @@ public class Principal extends javax.swing.JFrame {
         jMenuItem5 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        itemMenuData = new javax.swing.JMenuItem();
-        jMenuItem6 = new javax.swing.JMenuItem();
+        itemMenPrinFazerBackup = new javax.swing.JMenuItem();
+        itemMenuPrinRestore = new javax.swing.JMenuItem();
+
+        jMenuItem4.setText("jMenuItem4");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setLocationByPlatform(true);
@@ -207,18 +233,23 @@ public class Principal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
-        jMenu1.setText("Configuração");
+        jMenu1.setText("Backup");
 
-        itemMenuData.setText("Data");
-        itemMenuData.addActionListener(new java.awt.event.ActionListener() {
+        itemMenPrinFazerBackup.setText("Fazer Backup");
+        itemMenPrinFazerBackup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                itemMenuDataActionPerformed(evt);
+                itemMenPrinFazerBackupActionPerformed(evt);
             }
         });
-        jMenu1.add(itemMenuData);
+        jMenu1.add(itemMenPrinFazerBackup);
 
-        jMenuItem6.setText("Aliquotas");
-        jMenu1.add(jMenuItem6);
+        itemMenuPrinRestore.setText("Restaurar Backup");
+        itemMenuPrinRestore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                itemMenuPrinRestoreActionPerformed(evt);
+            }
+        });
+        jMenu1.add(itemMenuPrinRestore);
 
         jMenuBar1.add(jMenu1);
 
@@ -291,12 +322,6 @@ public class Principal extends javax.swing.JFrame {
       desktop.add(form);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
-    private void itemMenuDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuDataActionPerformed
-        FormConfiguracaoData form = new FormConfiguracaoData();
-        form.setVisible(true);
-        desktop.add(form);
-    }//GEN-LAST:event_itemMenuDataActionPerformed
-
     private void btnResumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResumoActionPerformed
          FormDeResumo form = new FormDeResumo();
       form.setVisible(true);
@@ -314,6 +339,18 @@ public class Principal extends javax.swing.JFrame {
         form.setVisible(true);
         desktop.add(form);
     }//GEN-LAST:event_jMenuItem7ActionPerformed
+
+    private void itemMenPrinFazerBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenPrinFazerBackupActionPerformed
+        try {
+            backup();
+        } catch (SQLException ex) {
+            Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_itemMenPrinFazerBackupActionPerformed
+
+    private void itemMenuPrinRestoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_itemMenuPrinRestoreActionPerformed
+        restoreBackup();
+    }//GEN-LAST:event_itemMenuPrinRestoreActionPerformed
 
     
     /**
@@ -356,8 +393,9 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnBfPesquisa;
     private javax.swing.JButton btnResumo;
     public static javax.swing.JDesktopPane desktop;
+    private javax.swing.JMenuItem itemMenPrinFazerBackup;
     private javax.swing.JMenuItem itemMenuCadSec;
-    private javax.swing.JMenuItem itemMenuData;
+    private javax.swing.JMenuItem itemMenuPrinRestore;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
@@ -365,8 +403,8 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;

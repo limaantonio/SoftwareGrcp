@@ -8,10 +8,7 @@ package telas;
 import dao.ModuloConexao;
 import entidades.Guia;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.logging.Level;
@@ -61,16 +58,23 @@ public class Pesquisa extends javax.swing.JInternalFrame {
     
     public void pesquisar(){
         
-        String sql = "SELECT GUIAS.GUI_ID, GUI_NUMERO, GUI_BASE,"
-                    + " GUI_VALOR_SERVIDOR, GUI_VALOR_PATRONAL,"
-                    + " GUI_VALOR_SUPLEMENTAR, GUI_OBSERVACAO, GUI_DATA_CADASTRO,"
-                    + " SEC.SEC_NOME, SET_NOME, SET_TIPO"
-                    + " FROM tbGuias AS GUIAS"
-                    + " INNER JOIN tbSetor AS SETOR"
-                    + " ON (SETOR.SET_ID = SetorId)"
-                    + " INNER JOIN tbSecretaria AS SEC"
-                    + " ON (SEC.SEC_ID = SETOR.SecretariaId)"
-                    + " where GUIAS.GUI_NUMERO LIKE ?";
+        String sql = "SELECT"
+                   +" GUIAS.GUI_ID, "
+                + "GUI_NUMERO, GUI_BASE, "
+                + "GUI_VALOR_SERVIDOR, "
+                + "GUI_VALOR_PATRONAL,"
+                   +" GUI_VALOR_SUPLEMENTAR, "
+                + "GUI_DATA_CADASTRO, "
+                + "GUI_DATA_VENCIMENTO, "
+                + "GUI_OBSERVACAO,"
+                   +" SEC.SEC_NOME, "
+                   +" SETOR.SET_NOME, SET_TIPO"
+                   +" from tbGuias AS GUIAS"
+                   +" inner join tbSetor as SETOR"
+                   +" on (SETOR.SET_ID = SetorId)"
+                   +" inner join tbSecretaria as SEC"
+                   +" on (SEC.SEC_ID = SETOR.SecretariaId)"
+                   +" where GUIAS.GUI_NUMERO LIKE ?";
          
         
 
@@ -104,21 +108,20 @@ public class Pesquisa extends javax.swing.JInternalFrame {
         txtValServidor.setText(tbGuias.getModel().getValueAt(setar, 3).toString());
         txtValPatronal.setText(tbGuias.getModel().getValueAt(setar, 4).toString());
         txtValSuplementar.setText(tbGuias.getModel().getValueAt(setar, 5).toString());
-        txtObservacao.setText(tbGuias.getModel().getValueAt(setar, 6).toString());
         
-        SimpleDateFormat sdf = new  SimpleDateFormat("dd/MM/yyyy");
-        String data = sdf.format(Date.valueOf(tbGuias.getModel().getValueAt(setar, 7).toString()));
-        txtData.setText(data.toString());
         
-        String data1 = sdf.format(Date.valueOf(tbGuias.getModel().getValueAt(setar, 7).toString()));
-        txtVencimento.setText(data.toString());
+        txtData.setText(tbGuias.getModel().getValueAt(setar, 6).toString());
        
-        cbSecretaria.setSelectedItem(tbGuias.getModel().getValueAt(setar, 8).toString());
-
-        txtOrgao.setText(tbGuias.getModel().getValueAt(setar, 8).toString()
-                        + ", " + tbGuias.getModel().getValueAt(setar, 9).toString());
+        txtVencimento.setText(tbGuias.getModel().getValueAt(setar, 7).toString());
         
-        System.out.println(tbGuias.getModel().getValueAt(setar, 9).toString());
+        txtObservacao.setText(tbGuias.getModel().getValueAt(setar, 8).toString());
+       
+        cbSecretaria.setSelectedItem(tbGuias.getModel().getValueAt(setar, 9).toString());
+
+        txtOrgao.setText(tbGuias.getModel().getValueAt(setar, 9).toString()
+                        + ", " + tbGuias.getModel().getValueAt(setar, 10).toString()
+                        + ", " + tbGuias.getModel().getValueAt(setar, 11).toString());
+       
         
         v1 = v1 + v2;
         v3 = v3 + v1;
@@ -150,6 +153,7 @@ public class Pesquisa extends javax.swing.JInternalFrame {
         setTitle("Consulta de Guias");
         addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
             public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameOpened(evt);
             }
             public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
             }
@@ -176,23 +180,23 @@ public class Pesquisa extends javax.swing.JInternalFrame {
 
         tbGuias.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Id", "Número", "Base de Cálculo", "Valor Servidor", "Valor Patronal", "Total Patronal", "Total Geral", "Observação", "Data de Cadastro", "Secretaria", "Setor", "Tipo"
+                "Id", "Número", "Base de Cálculo", "Valor Servidor", "Valor Patronal", "Total Patronal", "Total Geral", "Observação", "Data de Cadastro", "Data de Vencimento", "Secretaria", "Setor", "Tipo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -299,6 +303,12 @@ public class Pesquisa extends javax.swing.JInternalFrame {
     private void formKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyTyped
        
     }//GEN-LAST:event_formKeyTyped
+
+    private void formInternalFrameOpened(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameOpened
+       cbSecretaria.setEnabled(true);
+       cbSetor.setEnabled(true);
+       
+    }//GEN-LAST:event_formInternalFrameOpened
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

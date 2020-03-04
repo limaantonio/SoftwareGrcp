@@ -9,6 +9,10 @@ import dao.ModuloConexao;
 import entidades.Guia;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.text.NumberFormat;
@@ -16,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFormattedTextField;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
@@ -24,6 +30,7 @@ import net.proteanit.sql.DbUtils;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
+import net.sourceforge.barbecue.env.Environment;
 import static telas.FormDeRaltorio.txtRelCom;
 
 /**
@@ -49,6 +56,8 @@ public class NovaGuia extends javax.swing.JInternalFrame {
        });
         
     }
+    
+   
     
     public int retornaId() throws SQLException{
         String res ;
@@ -89,8 +98,9 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                 id =  rs.getString(1);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+           JOptionPane.showMessageDialog(null, e);
            // System.out.println(id);
+           
         }
         
         String idS = null;
@@ -104,6 +114,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
+           
            // System.out.println(id);
         }
         String sql = "INSERT INTO tbGuias ("
@@ -137,13 +148,14 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             pst.setString(6, txtObservacao.getText());
             
            
-            SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");  
-            java.util.Date data = formatador.parse(txtData.getText());
-            pst.setDate(7, new java.sql.Date(data.getTime()));
+//            SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");  
+//            java.util.Date data = formatador.parse(txtData.getText());
+//            pst.setDate(7, new java.sql.Date(data.getTime()));
+           // java.util.Date data2 = formatador.parse(txtVencimento.getText());
+            //pst.setDate(8, new java.sql.Date(data.getTime()));
             
-            
-            java.util.Date data2 = formatador.parse(txtVencimento.getText());
-            pst.setDate(8, new java.sql.Date(data.getTime()));
+            pst.setString(7, txtData.getText());
+            pst.setString(8, txtVencimento.getText());
             
             
             Integer idParSec = Integer.parseInt(idS) + cbSetor.getSelectedIndex();
@@ -182,15 +194,16 @@ public class NovaGuia extends javax.swing.JInternalFrame {
 
                 if(salvo >0){
                     JOptionPane.showMessageDialog(null, "Dados salvo com sucesso.");
-
+                    connection.close();
                 }
             }
             
             
            
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);
-            System.out.println(e);
+           JOptionPane.showMessageDialog(null, e);
+          //  System.out.println(e);
+           
         }
     }
     
@@ -207,6 +220,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
+           
            // System.out.println(id);
         }
         
@@ -231,14 +245,16 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             pst.setString(5, txtValSuplementar.getText());
             pst.setString(6, txtObservacao.getText());
             
-            SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");  
-            String str = txtData.getText();  
-            java.util.Date data = formatador.parse(str);
-          
-            pst.setDate(7, new java.sql.Date(data.getTime()));
-            
+//            SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");  
+//            String str = txtData.getText();  
+//            java.util.Date data = formatador.parse(str);
+//          
+//            pst.setDate(7, new java.sql.Date(data.getTime()));
+//            
             Integer idParSec = Integer.parseInt(idS) + cbSetor.getSelectedIndex();
-            System.out.println("id adf= " +idParSec.toString());
+           System.out.println("id adf= " +idParSec.toString());
+           
+           pst.setString(7, txtData.toString());
             pst.setString(8, idParSec.toString());
             
             txtOrgao.setText(cbSecretaria.getSelectedItem().toString()+" + "+cbSetor.getSelectedItem().toString());
@@ -264,7 +280,8 @@ public class NovaGuia extends javax.swing.JInternalFrame {
             }
            
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null, e);
+           JOptionPane.showMessageDialog(null, e);
+            
         }
     }
     private void excluir(){
@@ -298,6 +315,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                }
             }catch(Exception e){
                 JOptionPane.showMessageDialog(null, e);
+                
             }
         }
         
@@ -330,26 +348,23 @@ public class NovaGuia extends javax.swing.JInternalFrame {
         if(confirma == JOptionPane.YES_OPTION){
             
            HashMap filtro = new HashMap();
-           filtro.put("ID", Integer.parseInt(txtId.getText()));
-          // filtro.put("MES", txtData.getText().substring(3, 5));
-          
-          
-                  
-          // filtro.put("ANO", txtData.getText().substring(6, 10));
-           //filtro.put("SEC", cbSecretaria.getSelectedItem().toString());
+           filtro.put("ID", Integer.parseInt(txtNumero.getText()));
+           
+           InputStream rep = getClass().getResourceAsStream("Grcp.jasper");
            
            System.out.println( txtData.getText().substring(7, 10));
                    
            System.out.println(filtro);
             try{
                 JasperPrint print = JasperFillManager.fillReport(
-                       "/home/carlos/NetBeansProjects/Grcp/src/relatorios/Grcp.jasper"
+                       rep
                         ,filtro,connection);
                 
                 JasperViewer.viewReport(print, false);
             }catch(Exception e){
                 JOptionPane.showMessageDialog(null, e);
-                System.out.println(e);
+                //System.out.println(e);
+               
             }
         } 
     }
@@ -367,7 +382,8 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                 minId =  rs.getString(1);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+           JOptionPane.showMessageDialog(null, e);
+           
            // System.out.println(id);
         }
          
@@ -390,7 +406,8 @@ public class NovaGuia extends javax.swing.JInternalFrame {
               cbSetor.addItem(rs.getString(1)+" + "+rs.getString(2));
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, e);
+           JOptionPane.showMessageDialog(null, e);
+            
         }
     }
     
@@ -410,7 +427,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                cbSecretaria.addItem(rs.getString(2));
             }
         } catch (Exception e) {
-            
+            System.out.println(e);
         }
        
     }
@@ -868,7 +885,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
                             .addComponent(jLabel11)
                             .addComponent(txtTotalGeral, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(txtTotalPatronal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
 
         btnSalvar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icones/icons8-salvar-24.png"))); // NOI18N
@@ -976,6 +993,7 @@ public class NovaGuia extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtObservacaoActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        connection = ModuloConexao.conector();
         imprimir();
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -998,10 +1016,16 @@ public class NovaGuia extends javax.swing.JInternalFrame {
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
         salvar();
+        cbSecretaria.setEnabled(false);
+        cbSetor.setEnabled(false);
     }//GEN-LAST:event_btnSalvarActionPerformed
 
     private void btnNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNovoActionPerformed
         limpaCampos();
+        connection = ModuloConexao.conector();
+        cbSecretaria.setEnabled(true);
+        cbSetor.setEnabled(true);
+        
     }//GEN-LAST:event_btnNovoActionPerformed
 
     private void txtValServidorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValServidorActionPerformed

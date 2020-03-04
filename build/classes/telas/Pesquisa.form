@@ -13,6 +13,7 @@
     <SyntheticProperty name="generateSize" type="boolean" value="true"/>
   </SyntheticProperties>
   <Events>
+    <EventHandler event="internalFrameOpened" listener="javax.swing.event.InternalFrameListener" parameters="javax.swing.event.InternalFrameEvent" handler="formInternalFrameOpened"/>
     <EventHandler event="internalFrameClosed" listener="javax.swing.event.InternalFrameListener" parameters="javax.swing.event.InternalFrameEvent" handler="formInternalFrameClosed"/>
     <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="formKeyTyped"/>
     <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="formKeyPressed"/>
@@ -78,7 +79,7 @@
         <Component class="javax.swing.JTable" name="tbGuias">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="12" rowCount="10">
+              <Table columnCount="13" rowCount="10">
                 <Column editable="false" title="Id" type="java.lang.Object"/>
                 <Column editable="false" title="N&#xfa;mero" type="java.lang.Object"/>
                 <Column editable="false" title="Base de C&#xe1;lculo" type="java.lang.Object"/>
@@ -88,9 +89,10 @@
                 <Column editable="false" title="Total Geral" type="java.lang.Object"/>
                 <Column editable="false" title="Observa&#xe7;&#xe3;o" type="java.lang.Object"/>
                 <Column editable="false" title="Data de Cadastro" type="java.lang.Object"/>
+                <Column editable="false" title="Data de Vencimento" type="java.lang.Object"/>
                 <Column editable="false" title="Secretaria" type="java.lang.Object"/>
                 <Column editable="false" title="Setor" type="java.lang.Object"/>
-                <Column editable="true" title="Tipo" type="java.lang.Object"/>
+                <Column editable="false" title="Tipo" type="java.lang.Object"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -101,6 +103,11 @@
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="8" prefWidth="8" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>
                   <Renderer/>
